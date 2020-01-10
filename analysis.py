@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 import networkx as nx
 import pandas as pd
 
+grapg_csv_src = "ENGB_edges.csv"
+
 
 def load_graph(csv_name):
     """
@@ -34,33 +36,40 @@ def load_graph(csv_name):
     return graph
 
 
+def reconstract_grapg_after_filter(graph,node_list ,csv_name):
+    """
+    Loads a graph from a text file to the memory.
+    :param path: path of file.
+    :return:
+    """
+
+    graph.clear()
+    for i in node_list:
+        graph.add_node(i)
+
+    df = pd.read_csv(csv_name, header=None)
+    for index, row in df.iterrows():
+        u = row[0]
+        v = row[1]
+        if u in node_list and v in node_list:
+            graph.add_edge(u,v)
+
+    return graph
+
+
 def main():
-    graph = load_graph("ENGB_edges.csv")
+    graph = load_graph(grapg_csv_src)
     print("num of node:", len(graph.nodes()))
     print("num of edges:", len(graph.edges()))
 
+    node_filtered = [n for n in graph.node if graph.node[n]['degree'] >= 5]
+    graph = reconstract_grapg_after_filter(graph, node_filtered,grapg_csv_src)
 
-    nodes = [n for n in graph.node if graph.node[n]['degree'] >= 5]
 
-
-    edges_tag = set()
-    for n in graph.edge():
-        all_node.add(n)
-    graph.clear()
-    for i in edges:
-        u_tag = i[0]
-        v_tag = i[1]
-        if u_tag not in graph.nodes():
-            graph.add_node(u_tag)
-        if v_tag not in graph.nodes():
-            graph.add_node(v_tag)
-        graph.add_edge(u_tag, v_tag, id=i[2]['id'], weight=i[2]['weight'])
-    for n in all_node:
-        if n not in graph.nodes():
-            graph.add_node(n)
 
     print("num of node after filtering:", len(graph.nodes()))
     print("num of edges after filtering:", len(graph.edges()))
+
 
     print("the density of the graph:", nx.density(graph))
 
