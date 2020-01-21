@@ -141,6 +141,7 @@ def main():
     for u, v, p in preds_jc:
         pred_jc_dict[(u, v)] = p
     y = sorted(pred_jc_dict.items(), key=lambda x: x[1], reverse=True)[:10]
+    
     for i in y:
         print(i)
 
