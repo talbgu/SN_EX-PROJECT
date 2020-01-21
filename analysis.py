@@ -65,7 +65,39 @@ def betweeness(graph):
     for node_id_bc in top_10_betweennes_centr:
         node_id = node_id_bc[0]
         node_betweenness_centrality = node_id_bc[1]
-        print("node_id", " :",node_id , " :", node_betweenness_centrality, " ")
+        print("node_id", " :", node_id, " -", node_betweenness_centrality, " ")
+
+
+def degree(graph):
+    degree_centrality_coefficient = nx.degree_centrality(graph)
+    values = Counter(degree_centrality_coefficient)
+    top_10_degree_cent = values.most_common(10)
+    for node_id_dc in top_10_degree_cent:
+        node_id = node_id_dc[0]
+        node_degree_centrality = node_id_dc[1]
+        print("node_id", " :", node_id, " -", node_degree_centrality, " ")
+
+
+def eigenvector(graph):
+    eigenvector_centrality_dict = nx.eigenvector_centrality(graph, max_iter=900)
+    values = Counter(eigenvector_centrality_dict)
+    top_10_eigenvector = values.most_common(10)
+    for node_id_cc in top_10_eigenvector:
+        node_id = node_id_cc[0]
+        node_eigenvector = node_id_cc[1]
+        print("node_id", " :", node_id, " :", node_eigenvector, " ")
+
+
+def closeness(graph):
+    closeness_centrality_dict = nx.closeness_centrality(graph)
+    values = Counter(closeness_centrality_dict)
+    top_10_closeness = values.most_common(10)
+
+    for node_id_cc in top_10_closeness:
+        node_id = node_id_cc[0]
+
+        node_closeness_centrality = node_id_cc[1]
+        print("node_id", " :", node_id, " -", node_closeness_centrality, " ")
 
 
 def main():
@@ -83,6 +115,34 @@ def main():
 
     print("the Betweeness Centrality:")
     betweeness(graph)
+
+    print("the Degree Centrality:")
+    degree(graph)
+
+    print("the Eigenvector Centrality:")
+    eigenvector(graph)
+
+    print("the Closeness Centrality:")
+    closeness(graph)
+
+
+    print("Link Prediction - preferential_attachment(u,v) = deg(u)*deg(v)")
+    preds_pa = nx.preferential_attachment(graph.to_undirected())
+    pred_pa_dict = {}
+    for u, v, p in preds_pa:
+        pred_pa_dict[(u, v)] = p
+    x = sorted(pred_pa_dict.items(), key=lambda x: x[1], reverse=True)[:10]
+    for i in x:
+        print(i)
+
+    print("Link Prediction -jaccard_coefficient(u,v)")
+    preds_jc = nx.jaccard_coefficient(graph.to_undirected())
+    pred_jc_dict = {}
+    for u, v, p in preds_jc:
+        pred_jc_dict[(u, v)] = p
+    y = sorted(pred_jc_dict.items(), key=lambda x: x[1], reverse=True)[:10]
+    for i in y:
+        print(i)
 
 
 if __name__ == '__main__':
