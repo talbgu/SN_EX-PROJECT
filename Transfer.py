@@ -79,8 +79,8 @@ predictions = model.predict(X_test)
 
 print(accuracy_score(y_test, predictions))
 
-edges_path = 'DE_edges.csv'
-nodes_path = 'DE_target.csv'
+edges_path = 'FR_edges.csv'
+nodes_path = 'FR_target.csv'
 X_train, y_train, X_test, y_test = preprocess(edges_path, nodes_path)
 
 predictions = model.predict(X_test)
